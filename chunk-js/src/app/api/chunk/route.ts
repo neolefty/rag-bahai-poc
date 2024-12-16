@@ -22,7 +22,6 @@ export async function POST(req: Request) {
     }
 
     const messages = [promptMessage, documentMessage]
-    console.log({messages})
 
     const result = await generateObject({
         model: openai('gpt-4-turbo'),
@@ -37,7 +36,6 @@ export async function POST_stream(req: Request) {
     const { messages } = await req.json();
 
     const allMessages = [promptMessage, ...messages]
-    console.log(allMessages)
 
     const result = streamObject({
         model: openai('gpt-4-turbo'),
