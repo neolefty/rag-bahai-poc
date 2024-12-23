@@ -1,10 +1,9 @@
+import { CoreUserMessage, streamObject } from "ai"
+import { CHUNK_SYSTEM_MESSAGE } from "../chunkSystemPrompt"
 import { openai } from "@ai-sdk/openai"
-import { CoreUserMessage, generateObject } from "ai"
+import { ChunksSchema } from "../../../chunksSchema"
 import { NextResponse } from "next/server"
-import { ChunksSchema } from "../../chunksSchema"
-import { CHUNK_SYSTEM_MESSAGE } from "./chunkSystemPrompt"
 
-// Allow streaming up to 30 seconds
 export const maxDuration = 30
 
 export async function POST(req: Request) {
@@ -17,11 +16,10 @@ export async function POST(req: Request) {
 
     const messages = [CHUNK_SYSTEM_MESSAGE, documentMessage]
 
-    const result = await generateObject({
+    const aiResponse = streamObject({
         model: openai('gpt-4-turbo'),
         messages,
         schema: ChunksSchema,
     })
-
-    return NextResponse.json(result.object)
+    return aiResponse.toTextStreamResponse()
 }

@@ -11,7 +11,7 @@ export default function Home() {
 
     const {object, submit, isLoading } = useObject({
         schema: ChunksSchema,
-        api: "/api/chunk",
+        api: "/api/chunk/streaming",
         initialValue: {chunks: []},
     })
 
