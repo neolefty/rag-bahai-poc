@@ -2,7 +2,6 @@ import { CoreUserMessage, streamObject } from "ai"
 import { CHUNK_SYSTEM_MESSAGE } from "../chunkSystemPrompt"
 import { openai } from "@ai-sdk/openai"
 import { ChunksSchema } from "../../../chunksSchema"
-import { NextResponse } from "next/server"
 
 export const maxDuration = 30
 
