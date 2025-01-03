@@ -1,14 +1,19 @@
 services:
+
   pg:
+    container_name: rag_poc_pg
     build: ./pg
     environment:
-      POSTGRES_DB: phi3rag
-      POSTGRES_USER: phi3rag
-      POSTGRES_PASSWORD: phi3password
+      - POSTGRES_DB=rag
+      - POSTGRES_USER=rag
+      - POSTGRES_PASSWORD=rag_password
     ports:
       - "5432:5432"
+    networks:
+      - internal
     volumes:
-      - pg/data:/var/lib/postgresql/data
+      - ./pg/data:/var/lib/postgresql/data
+
 networks:
   internal:
     # let containers communicate with each other

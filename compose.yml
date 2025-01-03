@@ -1,0 +1,17 @@
+include:
+  - server/compose.yml
+
+services:
+  chunk-js:
+    container_name: rag_poc_chunk_js
+    build: ./chunk-js
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    networks:
+      - internal
+    volumes:
+      - ./chunk-js:/usr/src/app
+    stdin_open: true
+    tty: true
