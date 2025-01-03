@@ -4,7 +4,7 @@ import { experimental_useObject as useObject } from "ai/react"
 import { useCallback, useState } from "react"
 import { ChunksSchema } from "./chunksSchema"
 import { GLEANINGS_I } from "./gleaningsOne"
-import { Diff } from "./diff"
+import { Diff } from "../components/diff"
 
 export default function Home() {
     const [document, setDocument] = useState(GLEANINGS_I)
