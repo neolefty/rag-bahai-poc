@@ -9,8 +9,9 @@ Options:
 
 1. Run everything via `docker compose`:
 
-   * In the `client` directory: `pnpm install`
-   * In the root directory: `docker compose up`
+   1. In the `client` directory: `pnpm install`
+      * only necessary when deps change — **TODO** add to `docker compose build`
+   2. In the root directory: `docker compose up`
 
 2. Server via `docker compose` and client locally with `pnpm`:
 
