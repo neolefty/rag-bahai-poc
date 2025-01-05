@@ -23,8 +23,8 @@ export default function Home() {
 
     return (
         <div className="flex flex-col items-center space-y-4 py-5">
-            <label htmlFor="document" className="text-xl">
-                Document to be chunked:
+            <label htmlFor="document" className="text-2xl">
+                Document to be chunked
             </label>
             <textarea
                 id="document"
@@ -40,7 +40,7 @@ export default function Home() {
                     disabled={isLoading || !document?.trim()}
                     onClick={() => submit({document})}
                 >
-                    Chunk this text
+                    Chunk
                 </button>
                 <button type="button" className="btn btn-neutral" onClick={handleReset} disabled={isLoading}>
                     Reset
@@ -49,7 +49,7 @@ export default function Home() {
             {chunks.length > 0 && (
                 <>
                     <hr className="w-full" />
-                    <h2 className="text-xl">Chunks:</h2>
+                    <h2 className="text-2xl">Chunks</h2>
                     <ol className="w-[80vw] sm:max-w-[40rem] list-decimal">
                         {chunks.map((chunk, i) => (
                             <li key={i} className="mb-1">{chunk}</li>

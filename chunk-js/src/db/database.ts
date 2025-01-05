@@ -6,7 +6,7 @@ import { Database } from "./dbTypes"
 // for original template & more details.
 const dialect = new PostgresDialect({
     pool: new Pool({
-        // password is env PGPASSWORD; can use envs for these other values too
+        // password from env var PGPASSWORD; can use ev's for these other values too
         // See: https://node-postgres.com/features/connecting#environment-variables
         host: "pg",
         database: "rag",
