@@ -1,5 +1,14 @@
 import { Generated, Insertable, JSONColumnType, Selectable, Updateable } from "kysely"
 
+export interface Database {
+    document: DocumentTable
+    block: BlockTable
+    chunk: ChunkTable
+    embedding: EmbeddingTable
+    chunk_generator: ChunkGeneratorTable
+    language_model: LanguageModelTable
+}
+
 // A document such as a book which contains blocks of text.
 export interface DocumentTable {
     id: Generated<number>
