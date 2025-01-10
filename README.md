@@ -7,14 +7,9 @@ This is a proof of concept & learning exercise, intended for rapid development â
 
 Options:
 
-1. Run everything via `docker compose`:
-
-   1. In the `client` directory: `pnpm install`
-      * only necessary when deps change â€” **TODO** add to `docker compose build`
-   2. In the root directory: `docker compose up`
-
+1. Run everything via `docker compose up`, in the root directory.
+ 
 2. Server via `docker compose` and client locally with `pnpm`:
 
    * In the `server` directory: `docker compose up`
    * In the `client` directory: `pnpm install && pnpm dev`
-

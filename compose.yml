@@ -5,13 +5,17 @@ services:
   chunk-js:
     container_name: rag_poc_chunk_js
     build: ./chunk-js
+    command: pnpm dev
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=development
+    env_file:
+      - chunk-js/.env.local
     networks:
       - internal
-    volumes:
-      - ./chunk-js:/usr/src/app
+    volumes:  # avoid mounting node_modules
+      - ./chunk-js/src:/usr/src/app/src
+      - ./chunk-js/migrations:/usr/src/app/migrations
     stdin_open: true
     tty: true

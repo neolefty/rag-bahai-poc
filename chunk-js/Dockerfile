@@ -11,4 +11,4 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 FROM build AS dev
 EXPOSE 3000
 #CMD ["bash"]
-CMD ["pnpm", "dev"]
+#CMD ["pnpm", "dev"]

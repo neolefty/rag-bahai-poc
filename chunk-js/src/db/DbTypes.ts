@@ -81,7 +81,7 @@ export type UpdateEmbedding = Updateable<EmbeddingTable>
 export interface ChunkGeneratorTable {
     id: Generated<number>
 
-    short_description: string
+    short_description: string // unique
     // instructions to the model for this chunking strategy
     system_prompt: string
     language_model_id: number

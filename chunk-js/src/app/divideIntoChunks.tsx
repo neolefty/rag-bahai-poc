@@ -1,30 +1,41 @@
-"use client"
-
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { GLEANINGS_I } from "./gleaningsOne"
 import { experimental_useObject as useObject } from "ai/react"
 import { ChunksSchema } from "./chunksSchema"
 import { Diff } from "../components/diff"
 
-export const ChunkTest = () => {
+export const DivideIntoChunks = ({setChunks}: {
+        setChunks?: (chunks: string[] | undefined) => void
+    }) =>
+{
     const [document, setDocument] = useState(GLEANINGS_I)
 
     const {object, submit, isLoading } = useObject({
         schema: ChunksSchema,
         api: "/api/chunk/streaming",
-        initialValue: {chunks: []},
+        initialValue: {chunks: undefined},
     })
 
     const handleReset = useCallback(() => {
         setDocument(GLEANINGS_I)
     }, [])
 
-    const chunks = object?.chunks ?? []
+    const chunks: string[] | undefined = useMemo(() => {
+        // the strings can be undefined because of a use of DeepPartial<ChunkSchema> in the response
+        const result = object?.chunks?.filter(Boolean)
+        if (result?.length) return result as string[]
+        else return undefined
+    }, [object])
+
+    useEffect(() => {
+        if (!isLoading)
+            setChunks?.(chunks)
+    }, [chunks, isLoading, setChunks])
 
     return (
         <>
             <label htmlFor="document" className="text-2xl">
-                Document to be chunked
+                <h2>Document to be chunked</h2>
             </label>
             <textarea
                 id="document"
@@ -46,7 +57,7 @@ export const ChunkTest = () => {
                     Reset
                 </button>
             </div>
-            {chunks.length > 0 && (
+            {chunks && (
                 <>
                     <hr className="w-full" />
                     <h2 className="text-2xl">Chunks</h2>
@@ -57,7 +68,7 @@ export const ChunkTest = () => {
                     </ol>
                 </>
             )}
-            <Diff a={document} b={chunks.join(" ")} />
+            <Diff a={document} b={chunks?.join(" ") ?? ""} />
         </>
     )
 }
