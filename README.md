@@ -5,11 +5,20 @@ This is a proof of concept & learning exercise, intended for rapid development â
 
 ## Running
 
-Options:
+### Option 1: `docker compose`
 
-1. Run everything via `docker compose up`, in the root directory.
+* Initial setup (and whenever there are new migrations):
+
+   1. `docker compose build`
+   2. `docker compose up`
+   3. `docker compose exec chunk-js kysely migrate latest`
+
+* Normal operation: `docker compose up`
  
-2. Server via `docker compose` and client locally with `pnpm`:
+### Option 2: Server via `docker compose` and client locally with `pnpm`:
 
-   * In the `server` directory: `docker compose up`
-   * In the `client` directory: `pnpm install && pnpm dev`
+1. In the `server` directory: `docker compose up`
+2. Setup (first time and when there are new migrations):
+   * In the `client` directory: `pnpm install`
+   * Run migrations: `pnpm kysely migrate latest`
+3. Run the client: `pnpm dev`
