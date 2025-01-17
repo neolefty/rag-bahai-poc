@@ -35,10 +35,14 @@ export interface BlockTable {
     order: number
     // next_block_id & prev_block_id — okay if they're implied by order?
 
-    metadata: JSONColumnType<{
+    metadata: {
         url: string | null
         bibliographic_info: object | null
-    }>
+    }
+    // metadata: JSONColumnType<{
+    //     url: string | null
+    //     bibliographic_info: object | null
+    // }>
 }
 
 export type Block = Selectable<BlockTable>

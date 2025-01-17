@@ -28,6 +28,7 @@ export async function up(db: Kysely<any>) {
         .createTable('language_model')
         .addColumn('id', 'serial', col => col.primaryKey())
         .addColumn('vendor', 'varchar', col => col.notNull())
+        .addColumn('identifier', 'varchar', col => col.notNull())
         .addColumn('model_type', 'varchar', col => col.notNull())
         .addColumn('model_key_var', 'varchar')
         .execute()
