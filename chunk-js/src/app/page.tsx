@@ -1,8 +1,8 @@
 "use client"
 
-import { DivideIntoChunks } from "./divideIntoChunks"
 import { useState } from "react"
-import { SubmitChunks } from "./submitChunks"
+import { DivideIntoChunks } from "@/app/_chunk/divideIntoChunks"
+import { SubmitChunks } from "@/app/_chunk/submitChunks"
 
 export default function Home() {
     const [chunks, setChunks] = useState<string[] | undefined>(undefined)

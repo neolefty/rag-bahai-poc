@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { GLEANINGS_I } from "./gleaningsOne"
 import { experimental_useObject as useObject } from "ai/react"
+import { GLEANINGS_I } from "./gleaningsOne"
 import { ChunksSchema } from "./chunksSchema"
-import { Diff } from "../components/diff"
+import { Diff } from "@/components/diff"
 
 export const DivideIntoChunks = ({setChunks}: {
         setChunks?: (chunks: string[] | undefined) => void

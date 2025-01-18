@@ -1,8 +1,8 @@
 "use server"
 
-import { db } from "../db/database"
-import { Document } from "../db/dbTypes"
 import { RawBuilder, sql } from "kysely"
+import { db } from "@/db/database"
+import { Document } from "@/db/dbTypes"
 
 export async function submitChunks(title: string, chunks: string[]) {
     const document = await getOrCreateDocument(title)

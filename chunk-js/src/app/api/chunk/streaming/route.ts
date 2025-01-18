@@ -1,7 +1,7 @@
 import { CoreUserMessage, streamObject } from "ai"
-import { CHUNK_SYSTEM_MESSAGE } from "../chunkSystemPrompt"
 import { openai } from "@ai-sdk/openai"
-import { ChunksSchema } from "../../../chunksSchema"
+import { CHUNK_SYSTEM_MESSAGE } from "@/app/api/chunk/chunkSystemPrompt"
+import { ChunksSchema } from "@/app/_chunk//chunksSchema"
 
 export const maxDuration = 30
 

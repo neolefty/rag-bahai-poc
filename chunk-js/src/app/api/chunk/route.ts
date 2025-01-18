@@ -1,7 +1,7 @@
 import { openai } from "@ai-sdk/openai"
 import { CoreUserMessage, generateObject } from "ai"
 import { NextResponse } from "next/server"
-import { ChunksSchema } from "../../chunksSchema"
+import { ChunksSchema } from "@/app/_chunk/chunksSchema"
 import { CHUNK_SYSTEM_MESSAGE } from "./chunkSystemPrompt"
 
 // Allow streaming up to 30 seconds
