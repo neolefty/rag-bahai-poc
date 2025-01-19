@@ -11,15 +11,15 @@ This is a proof of concept & learning exercise, intended for rapid development â
 
    1. `docker compose build`
    2. `docker compose up`
-   3. `docker compose exec chunk-js kysely migrate latest`
+   3. `docker compose exec web kysely migrate latest`
 
 * Normal operation: `docker compose up`
  
-### Option 2: Server via `docker compose` and client locally with `pnpm`:
+### Option 2: Database via `docker compose` and web natively with `pnpm`:
 
-1. In the `server` directory: `docker compose up`
+1. In the `db` directory: `docker compose up`
 2. Setup (first time and when there are new migrations):
-   * In the `client` directory: `pnpm install`
+   * In the `web` directory: `pnpm install`
    * Run migrations: `pnpm kysely migrate latest`
 3. Run the client: `pnpm dev`
 
@@ -27,5 +27,5 @@ This is a proof of concept & learning exercise, intended for rapid development â
 
 _Assumes docker compose development enviromnent._
 
-* Undo migrations: `docker compose exec chunk-js kysely migrate down`
+* Undo migrations: `docker compose exec web kysely migrate down`
 * Postgres CLI: `PGPASSWORD=rag_password psql -p 5432 -h localhost -U rag`

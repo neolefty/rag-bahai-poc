@@ -1,21 +1,21 @@
 include:
-  - server/compose.yml
+  - db/compose.yml
 
 services:
-  chunk-js:
-    container_name: rag_poc_chunk_js
-    build: ./chunk-js
+  web:
+    container_name: rag_poc_web
+    build: ./web
     command: pnpm dev
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=development
     env_file:
-      - chunk-js/.env.local
+      - web/.env.local
     networks:
       - internal
     volumes:  # avoid mounting node_modules
-      - ./chunk-js/src:/usr/src/app/src
-      - ./chunk-js/migrations:/usr/src/app/migrations
+      - ./web/src:/usr/src/app/src
+      - ./web/migrations:/usr/src/app/migrations
     stdin_open: true
     tty: true

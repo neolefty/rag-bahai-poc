@@ -1,8 +1,11 @@
-# chunk-js
+# Web App
 
-Chunk documents for search & retrieval, using the Vercel AI SDK.
+Import documents & search them using the Vercel AI SDK.
 
-Video: [Jack Herrington shows how to use AI structured output](https://www.youtube.com/watch?v=_Rb4SpWRHC8).
+Videos:
+
+* Vercel AI SDK: [Jack Herrington shows how to use AI structured output](https://www.youtube.com/watch?v=_Rb4SpWRHC8).
+* RAG from Scratch: [Lance Martin walks through a RAG example using LangChain / Python](https://www.youtube.com/watch?v=sVcwVQRHIc8)
 
 ## Running
 

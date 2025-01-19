@@ -32,7 +32,7 @@ const getBibliographicInfo = async (url: string) => {
         model: openai('gpt-4-turbo'),
         messages: [{
             role: "user",
-            content: `What is the bibliographic information for the book represented by this URL? ${url}`,
+            content: `What is the bibliographic information for the book or document represented by this URL? ${url}`,
         }],
         schema: BibliographicSchema,
     })
