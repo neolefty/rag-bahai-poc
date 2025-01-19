@@ -3,8 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Chunker",
-  description: "Chunk documents into smaller pieces",
+  title: "Semantic Search",
+  description: "Search documents by their meaning",
 };
 
 export default function RootLayout({
