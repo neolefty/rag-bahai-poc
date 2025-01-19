@@ -1,4 +1,6 @@
-import { Generated, Insertable, JSONColumnType, Selectable, Updateable } from "kysely"
+import { z } from "zod"
+import { Generated, Insertable, Selectable, Updateable } from "kysely"
+import { BibliographicSchema } from "../app/_load/bibliographicSchema"
 
 export interface Database {
     document: DocumentTable
@@ -17,6 +19,7 @@ export interface DocumentTable {
     title: string
     raw_html: string | null
     raw_text: string | null
+    bibliographic_info: z.infer<typeof BibliographicSchema>
 }
 
 export type Document = Selectable<DocumentTable>
@@ -28,6 +31,7 @@ export interface BlockTable {
     id: Generated<number>
     document_id: number
     title: string
+    url: string
 
     raw_html: string | null
     raw_text: string | null
@@ -35,14 +39,9 @@ export interface BlockTable {
     order: number
     // next_block_id & prev_block_id — okay if they're implied by order?
 
-    metadata: {
-        url: string | null
-        bibliographic_info: object | null
-    }
-    // metadata: JSONColumnType<{
-    //     url: string | null
-    //     bibliographic_info: object | null
-    // }>
+    // same or different from parent document
+    bibliographic_info: object | null
+    // bibliographic_info: JSONColumnType<z.infer<typeof BibliographicSchema>>
 }
 
 export type Block = Selectable<BlockTable>

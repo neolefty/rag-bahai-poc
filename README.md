@@ -1,4 +1,4 @@
-# Bahá'í Writings – Semantic Search
+# Bahá’í Writings – Semantic Search
 Search the [Bahá’í Holy Writings](https://www.bahai.org/library/authoritative-texts/) using [Retrieval-Augmented Generation](https://en.wikipedia.org/wiki/Retrieval-augmented_generation).
 
 This is a proof of concept & learning exercise, intended for rapid development — and not necessarily refined.
@@ -22,3 +22,10 @@ This is a proof of concept & learning exercise, intended for rapid development �
    * In the `client` directory: `pnpm install`
    * Run migrations: `pnpm kysely migrate latest`
 3. Run the client: `pnpm dev`
+
+## Tips
+
+_Assumes docker compose development enviromnent._
+
+* Undo migrations: `docker compose exec chunk-js kysely migrate down`
+* Postgres CLI: `PGPASSWORD=rag_password psql -p 5432 -h localhost -U rag`

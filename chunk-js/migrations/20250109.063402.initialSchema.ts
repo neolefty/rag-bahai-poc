@@ -10,6 +10,7 @@ export async function up(db: Kysely<any>) {
         .addColumn('title', 'varchar', col => col.unique().notNull())
         .addColumn('raw_html', 'text')
         .addColumn('raw_text', 'text')
+        .addColumn('bibliographic_info', 'jsonb')
         .execute()
 
     await db.schema
@@ -17,11 +18,12 @@ export async function up(db: Kysely<any>) {
         .addColumn('id', 'serial', col => col.primaryKey())
         .addColumn('document_id', 'integer', col => col.references('document.id').notNull())
         .addColumn('title', 'varchar')
+        .addColumn('url', 'varchar')
         .addColumn('raw_html', 'text')
         .addColumn('raw_text', 'text')
         .addColumn('clean_text', 'text', col => col.notNull())
         .addColumn('order', 'integer', col => col.notNull())
-        .addColumn('metadata', 'jsonb', col => col.notNull())
+        .addColumn('bibliographic_info', 'jsonb', col => col.notNull())
         .execute()
 
     await db.schema
