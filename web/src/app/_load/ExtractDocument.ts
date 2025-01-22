@@ -1,6 +1,7 @@
 import { generateObject } from "ai"
 import { openai } from "@ai-sdk/openai"
 import { BibliographicSchema } from "./bibliographicSchema"
+import { LATEST_OPENAI_LOW_MODEL } from "@/lib/llmConstants"
 
 // 1. Load document from a URL
 //    * get bibliographic info
@@ -29,7 +30,7 @@ const loadDocument = async (
 
 const getBibliographicInfo = async (url: string) => {
     const aiResponse = await generateObject({
-        model: openai('gpt-4-turbo'),
+        model: openai(LATEST_OPENAI_LOW_MODEL),
         messages: [{
             role: "user",
             content: `What is the bibliographic information for the book or document represented by this URL? ${url}`,

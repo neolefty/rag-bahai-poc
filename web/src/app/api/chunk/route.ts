@@ -3,6 +3,7 @@ import { CoreUserMessage, generateObject } from "ai"
 import { NextResponse } from "next/server"
 import { ChunksSchema } from "@/app/_chunk/chunksSchema"
 import { CHUNK_SYSTEM_MESSAGE } from "./chunkSystemPrompt"
+import { LATEST_OPENAI_LOW_MODEL } from "@/lib/llmConstants"
 
 // Allow streaming up to 30 seconds
 export const maxDuration = 30
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
     const messages = [CHUNK_SYSTEM_MESSAGE, documentMessage]
 
     const result = await generateObject({
-        model: openai('gpt-4-turbo'),
+        model: openai(LATEST_OPENAI_LOW_MODEL),
         messages,
         schema: ChunksSchema,
     })

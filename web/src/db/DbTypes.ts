@@ -99,7 +99,7 @@ export interface LanguageModelTable {
     id: Generated<number>
 
     vendor: string
-    identifier: string // the vendor's name for this, for example "gpt-4-turbo"
+    identifier: string // the vendor's name for this, for example "gpt-4o-mini"
     model_type: "embedding" | "generation" | "reranking" // etc
     model_key_var: string | null // name of the environment variable that holds the key
 }
