@@ -1,16 +1,16 @@
 "use client"
 
-import { useState } from "react"
-import { DivideIntoChunks } from "@/app/_chunk/divideIntoChunks"
-import { SubmitChunks } from "@/app/_chunk/submitChunks"
-
 export default function Home() {
-    const [chunks, setChunks] = useState<string[] | undefined>(undefined)
     return (
         <div className="flex flex-col items-center space-y-4 py-5">
-            <DivideIntoChunks setChunks={setChunks}/>
-            <hr className="w-full"/>
-            {chunks && <SubmitChunks chunks={chunks}/>}
+            <h1 className="text-3xl">
+                <a
+                    target="_blank" href="https://en.wikipedia.org/wiki/Retrieval-augmented_generation"
+                    className="text-blue-800 dark:text-blue-400"
+                >
+                    RAG
+                </a> Proof of Concept
+            </h1>
         </div>
     )
 }

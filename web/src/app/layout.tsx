@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Navbar } from "@/app/navbar"
 
 export const metadata: Metadata = {
   title: "Semantic Search",
@@ -18,6 +19,7 @@ export default function RootLayout({
         <link rel="icon" href="/book-icon.png" />
     </head>
       <body>
+        <Navbar />
         {children}
       </body>
     </html>
