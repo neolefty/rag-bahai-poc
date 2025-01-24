@@ -15,11 +15,12 @@ export interface Database {
 export interface DocumentTable {
     id: Generated<number>
 
-    url: string | null
+    url: string
     title: string
     raw_html: string | null
     raw_text: string | null
     bibliographic_info: z.infer<typeof BibliographicSchema>
+    // bibliographic_info: JSONColumnType<z.infer<typeof BibliographicSchema>>
 }
 
 export type Document = Selectable<DocumentTable>
@@ -40,7 +41,7 @@ export interface BlockTable {
     // next_block_id & prev_block_id — okay if they're implied by order?
 
     // same or different from parent document
-    bibliographic_info: object | null
+    bibliographic_info: z.infer<typeof BibliographicSchema>
     // bibliographic_info: JSONColumnType<z.infer<typeof BibliographicSchema>>
 }
 

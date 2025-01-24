@@ -15,6 +15,18 @@ import { LATEST_OPENAI_LOW_MODEL } from "@/lib/llmConstants"
 // 3. Break up blocks into chunks
 //    * clean text vs raw text: is embedding better with clean?
 
+
+// Save document to the database, unless it already exists.
+const extractDocument = async (
+    url: string,
+    update?: (step: string) => void
+) => {
+    const document = await loadDocument(url, update)
+    update?.("saving document")
+
+}
+
+// Load a document from a URL, including bibliographic info.
 const loadDocument = async (
     url: string,
     update?: (step: string) => void
@@ -25,7 +37,12 @@ const loadDocument = async (
     update?.("getting bibliographic info")
     const bibliographicInfo = await getBibliographicInfo(url)
 
-    return rawHtml
+    return {
+        url,
+        title: bibliographicInfo.title,
+        rawHtml,
+        bibliographicInfo,
+    }
 }
 
 const getBibliographicInfo = async (url: string) => {

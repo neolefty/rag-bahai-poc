@@ -6,11 +6,11 @@ export async function up(db: Kysely<any>) {
     await db.schema
         .createTable('document')
         .addColumn('id', 'serial', col => col.primaryKey())
-        .addColumn('url', 'varchar')
-        .addColumn('title', 'varchar', col => col.unique().notNull())
+        .addColumn('url', 'varchar', col => col.unique().notNull())
+        .addColumn('title', 'varchar', col => col.notNull())
         .addColumn('raw_html', 'text')
         .addColumn('raw_text', 'text')
-        .addColumn('bibliographic_info', 'jsonb')
+        .addColumn('bibliographic_info', 'jsonb', col => col.notNull())
         .execute()
 
     await db.schema

@@ -6,7 +6,7 @@ export const SubmitChunks = ({chunks}: {chunks: string[]}) => {
     const [title, setTitle] = useState("")
     const handleSubmit = useCallback(async () => {
         if (title && chunks.length) {
-            const response = await submitChunks(title, chunks)
+            const response = await submitChunks(title, "https://example.com", chunks)
             console.log({result: response})
         }
     }, [])
@@ -28,7 +28,7 @@ export const SubmitChunks = ({chunks}: {chunks: string[]}) => {
                 />
                 <button
                     className="btn btn-primary"
-                    onClick={() => submitChunks(title, chunks)}
+                    onClick={handleSubmit}
                     disabled={!title || !chunks.length}
                 >
                     Save

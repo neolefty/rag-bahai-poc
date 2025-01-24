@@ -4,9 +4,9 @@ import { RawBuilder, sql } from "kysely"
 import { db } from "@/db/database"
 import { Document } from "@/db/dbTypes"
 
-export async function submitChunks(title: string, chunks: string[]) {
-    const document = await getOrCreateDocument(title)
-    const block = await getOrCreateDegenerateBlock(document, title)
+export async function submitChunks(title: string, url: string, chunks: string[]) {
+    const document = await getOrCreateDocument(title, url)
+    const block = await getOrCreateDegenerateBlock(document)
     const chunkGenerator = await getOrCreatePlaceholderChunkGenerator()
     const chunkObjects = chunks.map((clean_text, order) => ({
         clean_text,
@@ -22,7 +22,8 @@ function json<T>(value: T): RawBuilder<T> {
     return sql`CAST(${JSON.stringify(value)} AS JSONB)`
 }
 
-export async function getOrCreateDegenerateBlock(document: Document, title: string) {
+export async function getOrCreateDegenerateBlock(document: Document) {
+    const title = document.title
     let block = await db
         .selectFrom("block")
         .where("document_id", "=", document.id)
@@ -34,10 +35,13 @@ export async function getOrCreateDegenerateBlock(document: Document, title: stri
             .insertInto("block")
             .values({
                 document_id: document.id,
+                url: document.url,
                 title,
                 clean_text: "",
                 order: 0,
-                metadata: json({url: null, bibliographic_info: null}),
+                bibliographic_info: json({
+                    title: document.title,
+                }),
             })
             .returningAll()
             .executeTakeFirstOrThrow()
@@ -47,7 +51,7 @@ export async function getOrCreateDegenerateBlock(document: Document, title: stri
 // todo turn a document into blocks and blocks into chunks
 
 // Find or create a document with the given title
-const getOrCreateDocument = async (title: string) => {
+const getOrCreateDocument = async (title: string, url: string) => {
     // Note this is a good reason to switch to Supabase, which supports upsert: https://supabase.com/docs/reference/javascript/upsert
     let document = await db
         .selectFrom("document")
@@ -57,7 +61,7 @@ const getOrCreateDocument = async (title: string) => {
     if (!document)
         document = await db
             .insertInto("document")
-            .values({title})
+            .values({title, url, bibliographic_info: json({title})})
             .returningAll()
             .executeTakeFirstOrThrow()
     // const allDocs = await db.selectFrom("document").selectAll().execute()
