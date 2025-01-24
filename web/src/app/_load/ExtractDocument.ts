@@ -1,7 +1,10 @@
+"use server"
+
 import { generateObject } from "ai"
 import { openai } from "@ai-sdk/openai"
 import { BibliographicSchema } from "./bibliographicSchema"
 import { LATEST_OPENAI_LOW_MODEL } from "@/lib/llmConstants"
+import { db } from "@/db/database"
 
 // 1. Load document from a URL
 //    * get bibliographic info
@@ -43,6 +46,10 @@ const loadDocument = async (
         rawHtml,
         bibliographicInfo,
     }
+}
+
+export const listDocumentsAction = async () => {
+    return db.selectFrom("document").selectAll().execute()
 }
 
 const getBibliographicInfo = async (url: string) => {
