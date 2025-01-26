@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import useSWR from "swr"
 import { experimental_useObject as useObject } from "ai/react"
 import { listDocumentsAction } from "@/app/_load/ExtractDocument"
@@ -33,21 +33,10 @@ export default function Home() {
         submit({documentUrl})
     }
 
-    // const [step, setStep] = useState({
-    //     step: "",
-    //     isError: false,
-    // })
-    // const handleSubmit = async () => {
-    //     // TODO convert this to a streamObject style function
-    //     await extractDocumentAction(url, (step, isError) =>
-    //         setStep({step, isError: !!isError})
-    //     )
-    //     if (!step.isError) {
-    //         setStep({step: "reloading", isError: false})
-    //         setUrl("")
-    //     }
-    //     await mutate()
-    // }
+    useEffect(() => {
+        if (!isLoading)
+            mutate()
+    }, [isLoading]) // don't make mutate a dependency, or it may fire too frequently
 
     return (
         <div className="flex flex-col items-center space-y-4 py-5">
@@ -61,14 +50,13 @@ export default function Home() {
                     value={documentUrl}
                     onChange={e => setDocumentUrl(e.target.value)}
                 />
-                <button className="btn btn-primary" onClick={handleSubmit} disabled={!documentUrl}>
+                <button className="btn btn-primary" onClick={handleSubmit} disabled={!documentUrl || isLoading}>
                     Load
                 </button>
                 <div className={latestStatus?.isError ? "text-red-500" : "text-gray-500" + " min-w-12"}>
                     {latestStatus?.step}
                 </div>
             </div>
-            {/*<p className={step.isError ? "text-red-500" : "text-gray-500"}>{step.step}</p>*/}
 
             <hr className="w-full border-gray-300" />
 
