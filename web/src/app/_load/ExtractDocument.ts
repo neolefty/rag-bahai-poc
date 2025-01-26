@@ -5,6 +5,8 @@ import { openai } from "@ai-sdk/openai"
 import { BibliographicSchema } from "./bibliographicSchema"
 import { LATEST_OPENAI_LOW_MODEL } from "@/lib/llmConstants"
 import { db } from "@/db/database"
+import { NewDocument } from "@/db/dbTypes"
+import { SetStep } from "@/lib/stepStatus"
 
 // 1. Load document from a URL
 //    * get bibliographic info
@@ -18,33 +20,45 @@ import { db } from "@/db/database"
 // 3. Break up blocks into chunks
 //    * clean text vs raw text: is embedding better with clean?
 
-
 // Save document to the database, unless it already exists.
-const extractDocument = async (
+export const extractDocument = async (
     url: string,
-    update?: (step: string) => void
+    setStep?: SetStep
 ) => {
-    const document = await loadDocument(url, update)
-    update?.("saving document")
-
+    // ensure url is unique
+    const existingDocument = await db
+        .selectFrom("document")
+        .where("url", "=", url)
+        .selectAll()
+        .executeTakeFirst()
+    if (existingDocument) {
+        setStep?.("document already exists", true)
+    }
+    else {
+        const document = await loadDocument(url, setStep)
+        setStep?.("saving document")
+        await db.insertInto("document").values(document).execute()
+        // if we want to return the document
+        // return await db.insertInto("document").values(document).returningAll().executeTakeFirstOrThrow()
+    }
 }
 
 // Load a document from a URL, including bibliographic info.
 const loadDocument = async (
     url: string,
-    update?: (step: string) => void
-) => {
+    setStep?: SetStep
+): Promise<NewDocument> => {
     const response = await fetch(url)
-    update?.("fetching document")
-    const rawHtml = await response.text()
-    update?.("getting bibliographic info")
-    const bibliographicInfo = await getBibliographicInfo(url)
+    setStep?.("fetching document")
+    const raw_html = await response.text() || null
+    setStep?.("getting bibliographic info")
+    const bibliographic_info = await getBibliographicInfo(url)
 
     return {
         url,
-        title: bibliographicInfo.title,
-        rawHtml,
-        bibliographicInfo,
+        title: bibliographic_info.title,
+        raw_html,
+        bibliographic_info,
     }
 }
 

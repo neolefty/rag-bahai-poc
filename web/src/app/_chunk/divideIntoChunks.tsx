@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { experimental_useObject as useObject } from "ai/react"
-import { GLEANINGS_I } from "./gleaningsOne"
+import { GLEANINGS_I } from "@/lib/gleanings"
 import { ChunksSchema } from "./chunksSchema"
 import { Diff } from "@/components/diff"
 
@@ -10,7 +10,7 @@ export const DivideIntoChunks = ({setChunks}: {
 {
     const [document, setDocument] = useState(GLEANINGS_I)
 
-    const {object, submit, isLoading } = useObject({
+    const { object, submit, isLoading } = useObject({
         schema: ChunksSchema,
         api: "/api/chunk/streaming",
         initialValue: {chunks: undefined},
