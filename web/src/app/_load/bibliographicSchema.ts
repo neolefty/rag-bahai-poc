@@ -2,6 +2,7 @@ import { z } from "zod"
 
 export const BibliographicSchema = z.object({
     title: z.string(),
+    // TODO consider extracting author etc from meta tags of document itself
     author: z.string().optional(),
     documentType: z.enum([
         'book', 'letter', 'tablet', 'statement', 'prayer', 'meditation', 'compilation', 'pilgrim note'
