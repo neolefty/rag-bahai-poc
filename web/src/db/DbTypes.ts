@@ -24,6 +24,7 @@ export interface DocumentTable {
 }
 
 export type Document = Selectable<DocumentTable>
+export type DocumentSummary = Pick<Document, "id" | "title" | "url" | "bibliographic_info">
 export type NewDocument = Insertable<DocumentTable>
 export type UpdateDocument = Updateable<DocumentTable>
 

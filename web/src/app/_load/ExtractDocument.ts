@@ -5,7 +5,7 @@ import { openai } from "@ai-sdk/openai"
 import { BibliographicSchema } from "./bibliographicSchema"
 import { LATEST_OPENAI_LOW_MODEL } from "@/lib/llmConstants"
 import { db } from "@/db/database"
-import { NewDocument } from "@/db/dbTypes"
+import { DocumentSummary, NewDocument } from "@/db/dbTypes"
 import { SetStep } from "@/lib/stepStatus"
 
 // 1. Load document from a URL
@@ -52,7 +52,7 @@ const loadDocument = async (
     setStep?.("fetching document")
     const raw_html = await response.text() || null
     setStep?.("getting bibliographic info")
-    const bibliographic_info = await getBibliographicInfo(url)
+    const bibliographic_info = await loadBibliographicInfo(url)
 
     return {
         url,
@@ -62,11 +62,7 @@ const loadDocument = async (
     }
 }
 
-export const listDocumentsAction = async () => {
-    return db.selectFrom("document").selectAll().execute()
-}
-
-const getBibliographicInfo = async (url: string) => {
+const loadBibliographicInfo = async (url: string) => {
     const aiResponse = await generateObject({
         model: openai(LATEST_OPENAI_LOW_MODEL),
         messages: [{
@@ -76,4 +72,11 @@ const getBibliographicInfo = async (url: string) => {
         schema: BibliographicSchema,
     })
     return aiResponse.object
+}
+
+export const listDocumentSummariesAction = async (): Promise<DocumentSummary[]> => {
+    return db.selectFrom("document")
+        .select(["id", "title", "url", "bibliographic_info"])
+        .execute()
+    // .selectAll().execute()
 }
