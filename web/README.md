@@ -1,4 +1,4 @@
-# Web App
+# RAG Web App
 
 Import documents & search them using the Vercel AI SDK.
 
@@ -21,10 +21,12 @@ Open http://localhost:3000.
 
 ## Goals
 
-* Big enough to be meaningful.
-* Small enough to be embedded in vector space.
+* Learn RAG elements
+* Learn how to use the Vercel AI SDK
 
-## Ideas
+## Next Steps
 
-* Store links to next & prev chunks.
-    * Would allow vector search followed by merging and re-embedding & reranking.
+* Get blocking working (divide documents into sections that each have a unique link)
+  * Recognize that initial division may be very simple, just get it good enough to move on 
+* Vector search
+  * Convert query to intermediate inputs that are in the same vector space as the documents
