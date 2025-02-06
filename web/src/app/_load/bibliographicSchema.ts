@@ -15,4 +15,5 @@ export const BibliographicSchema = z.object({
     publisher: z.string().optional(),
     description: z.string().optional(),
     otherInformation: z.string().optional(),
+    metaTags: z.record(z.string()).optional(),
 })

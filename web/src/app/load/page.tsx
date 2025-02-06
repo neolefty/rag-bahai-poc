@@ -75,7 +75,7 @@ export default function Home() {
 }
 
 const DocumentPanel = ({document}: {document: DocumentSummary}) => {
-    const {latestStatus, submit, isLoading} = useSteppedApi("/api/document/breakIntoBlocks")
+    const {latestStatus, submit, isLoading} = useSteppedApi("/api/document/parse")
     const handleSubmit = async () => {
         submit({documentId: document.id})
     }

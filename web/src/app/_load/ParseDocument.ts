@@ -8,7 +8,8 @@ import { SetStep } from "@/lib/stepStatus"
 import { db } from "@/db/database"
 import { Document } from "@/db/dbTypes"
 
-export const breakIntoBlocks = async (
+// Load a document from the database, parse its HTML, extract meta tags, break into blocks, and extract text.
+export const parseDocument = async (
     doc: Document | number,
     setStep: SetStep,
 ) => {
@@ -23,7 +24,7 @@ export const breakIntoBlocks = async (
     }
     if (!document) throw new Error("Document not found") // shouldn't happen — already threw when loading from DB
 
-    setStep("breaking into blocks")
+    setStep("parsing document")
     // split into blocks, using unified
     const tree: Root = unified()
         .use(rehypeParse, {
@@ -31,13 +32,55 @@ export const breakIntoBlocks = async (
             compressWhitespace: true,
         })
         .parse(`${document.raw_html}`)
-    debugPrint(tree)
+
+    const oldMeta = document.bibliographic_info.metaTags ?? {}
+    const newMeta = {
+        ...oldMeta,
+        ...extractMetaTags(tree),
+    }
+    if (JSON.stringify(oldMeta) !== JSON.stringify(newMeta)) {
+        setStep("updating meta tags")
+        await db.updateTable("document").set({
+            bibliographic_info: {
+                ...document.bibliographic_info,
+                metaTags: newMeta,
+            },
+        }).where("id", "=", document.id).execute()
+    }
+
+    // debugPrint(tree)
 
 
 
         // .use(rehypeStringify)
         // .process(`${document.raw_html}`)
         // .parse(document.raw_html)
+}
+
+const extractMetaTags = (root: Root) => {
+    const meta: Record<string, string> = {}
+    const html = root.children.find(node => node.type === "element" && node.tagName === "html") ?? root
+    if (html.type !== "element") {
+        console.error("no html found")
+        return meta
+    }
+
+    const head = html.children.find(node => node.type === "element" && node.tagName === "head")
+    if (head && head.type === "element") {
+        if (head.children) {
+            for (const child of head.children) {
+                if (child.type === "element" && child.tagName === "meta") {
+                    const name = child.properties?.name as string | undefined
+                    const content = child.properties?.content as string | undefined
+                    if (name && content) {
+                        meta[name] = content
+                    }
+                }
+            }
+        }
+    }
+    console.log({ meta })
+    return meta
 }
 
 const TEXT_MAX_WIDTH = 80
