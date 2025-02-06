@@ -18,6 +18,7 @@ export interface DocumentTable {
     url: string
     title: string
     raw_html: string | null
+    clean_html: string | null
     raw_text: string | null
     bibliographic_info: z.infer<typeof BibliographicSchema>
     // bibliographic_info: JSONColumnType<z.infer<typeof BibliographicSchema>>
@@ -36,6 +37,7 @@ export interface BlockTable {
     url: string
 
     raw_html: string | null
+    clean_html: string | null
     raw_text: string | null
     clean_text: string
     order: number
