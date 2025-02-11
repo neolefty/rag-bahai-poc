@@ -2,6 +2,7 @@
 
 import { unified } from "unified"
 import rehypeParse from "rehype-parse"
+import rehypeSanitize from "rehype-sanitize"
 import { Root, RootContent, Node } from "hast"
 // import rehypeStringify from "rehype-stringify"
 import { SetStep } from "@/lib/stepStatus"
@@ -31,13 +32,16 @@ export const parseDocument = async (
             fragment: false,
             compressWhitespace: true,
         })
+        .use(rehypeSanitize)
         .parse(`${document.raw_html}`)
+    debugPrint(tree)
 
     const oldMeta = document.bibliographic_info.metaTags ?? {}
     const newMeta = {
         ...oldMeta,
         ...extractMetaTags(tree),
     }
+    console.log({ newMeta })
     if (JSON.stringify(oldMeta) !== JSON.stringify(newMeta)) {
         setStep("updating meta tags")
         await db.updateTable("document").set({
@@ -48,7 +52,6 @@ export const parseDocument = async (
         }).where("id", "=", document.id).execute()
     }
 
-    // debugPrint(tree)
 
 
 
@@ -79,7 +82,6 @@ const extractMetaTags = (root: Root) => {
             }
         }
     }
-    console.log({ meta })
     return meta
 }
 
