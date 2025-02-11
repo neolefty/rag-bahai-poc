@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { Generated, Insertable, Selectable, Updateable } from "kysely"
-import { BibliographicSchema } from "../app/_load/bibliographicSchema"
+import { BibliographicSchema } from "@/app/_load/bibliographicSchema"
 
 export interface Database {
     document: DocumentTable

@@ -5,7 +5,7 @@ import useSWR from "swr"
 import { experimental_useObject as useObject } from "ai/react"
 import { JsonValue } from "type-fest"
 import { listDocumentSummariesAction } from "@/app/_load/ExtractDocument"
-import { SetStatus, StepStatus, StepStatuses, StepStatusesSchema } from "@/lib/stepStatus"
+import { StepStatus, StepStatusesSchema } from "@/lib/stepStatus"
 import { GLEANINGS_URL } from "@/lib/gleanings"
 import { DocumentSummary } from "@/db/dbTypes"
 
@@ -66,7 +66,7 @@ export default function Home() {
             <ul className="list-disc">
                 {documents?.map(document => (
                     <li key={document.id}>
-                        <DocumentPanel document={document} />
+                        <DocumentPanel document={document} mutate={mutate} />
                     </li>
                 ))}
             </ul>
@@ -75,17 +75,31 @@ export default function Home() {
     )
 }
 
-const DocumentPanel = ({document}: {document: DocumentSummary}) => {
+const DocumentPanel = ({document, mutate}: {
+    document: DocumentSummary,
+    mutate?: () => void,
+}) => {
     const [latestStatus, setLatestStatus] = useState<Partial<StepStatus> | undefined>()
     return (
-        <div className="flex flex-row space-x-4 items-center my-2">
+        <div className="flex flex-row gap-2 items-center my-2">
             <a href={document.url} className="text-blue-700 dark:text-blue-400 hover:underline">{document.title}</a>
             <SteppedButton
-                label="Break into blocks"
                 api="/api/document/parse"
                 payload={{documentId: document.id}}
                 setLatestStatus={setLatestStatus}
-            />
+                mutate={mutate}
+            >
+                Break into blocks
+            </SteppedButton>
+            <SteppedButton
+                api="/api/document/delete"
+                payload={{documentId: document.id}}
+                setLatestStatus={setLatestStatus}
+                className="btn-error"
+                mutate={mutate}
+            >
+                Delete
+            </SteppedButton>
             <div className={latestStatus?.isError ? "text-red-500" : "text-gray-500" + " min-w-12"}>
                 {latestStatus?.step}
             </div>
@@ -95,11 +109,12 @@ const DocumentPanel = ({document}: {document: DocumentSummary}) => {
 
 type SetPartialStatus = (status?: Partial<StepStatus>) => void
 
-const SteppedButton = ({label, api, payload, setLatestStatus, className}: {
-    label: string,
+const SteppedButton = ({children, api, payload, setLatestStatus, mutate, className}: {
+    children: React.ReactNode,
     api: string,
     payload: JsonValue,
     setLatestStatus?: SetPartialStatus,
+    mutate?: () => void,
     className?: string,
 }) => {
     const {latestStatus, submit, isLoading} = useSteppedApi(api)
@@ -109,6 +124,10 @@ const SteppedButton = ({label, api, payload, setLatestStatus, className}: {
     useEffect(() => {
         setLatestStatus?.(latestStatus)
     }, [latestStatus, setLatestStatus])
+    useEffect(() => { // refresh when loading is done
+        if (!isLoading)
+            mutate?.()
+    }, [isLoading])
     return (
         <>
             <button
@@ -116,7 +135,7 @@ const SteppedButton = ({label, api, payload, setLatestStatus, className}: {
                 onClick={handleSubmit}
                 disabled={isLoading}
             >
-                {label}
+                {children}
             </button>
         </>
     )
