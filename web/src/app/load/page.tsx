@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import useSWR from "swr"
 import { experimental_useObject as useObject } from "ai/react"
 import { JsonValue } from "type-fest"
@@ -36,9 +36,8 @@ export default function Home() {
     }
 
     useEffect(() => {
-        if (!isLoading)
-            mutate()
-    }, [isLoading]) // don't make mutate a dependency, or it may fire too frequently
+        if (!isLoading) mutate()
+    }, [isLoading, mutate])
 
     return (
         <div className="flex flex-col items-center space-y-4 py-5">
@@ -48,7 +47,7 @@ export default function Home() {
                 <input
                     type="text"
                     placeholder="Document URL"
-                    className="input"
+                    className="input w-[60vw] text-right"
                     value={documentUrl}
                     onChange={e => setDocumentUrl(e.target.value)}
                 />
@@ -66,7 +65,11 @@ export default function Home() {
             <ul className="list-disc">
                 {documents?.map(document => (
                     <li key={document.id}>
-                        <DocumentPanel document={document} mutate={mutate} />
+                        <DocumentPanel
+                            document={document}
+                            mutate={mutate}
+                            setDocumentUrl={setDocumentUrl}
+                        />
                     </li>
                 ))}
             </ul>
@@ -75,11 +78,17 @@ export default function Home() {
     )
 }
 
-const DocumentPanel = ({document, mutate}: {
+const DocumentPanel = ({document, mutate, setDocumentUrl}: {
     document: DocumentSummary,
     mutate?: () => void,
+    setDocumentUrl?: (documentUrl: string) => void,
 }) => {
     const [latestStatus, setLatestStatus] = useState<Partial<StepStatus> | undefined>()
+    const documentUrl = document.url
+    const mutateAndSetDocumentUrl = useCallback(() => {
+        setDocumentUrl?.(documentUrl)
+        mutate?.()
+    }, [documentUrl, setDocumentUrl, mutate])
     return (
         <div className="flex flex-row gap-2 items-center my-2">
             <a href={document.url} className="text-blue-700 dark:text-blue-400 hover:underline">{document.title}</a>
@@ -96,7 +105,7 @@ const DocumentPanel = ({document, mutate}: {
                 payload={{documentId: document.id}}
                 setLatestStatus={setLatestStatus}
                 className="btn-error"
-                mutate={mutate}
+                mutate={mutateAndSetDocumentUrl}
             >
                 Delete
             </SteppedButton>
@@ -109,25 +118,34 @@ const DocumentPanel = ({document, mutate}: {
 
 type SetPartialStatus = (status?: Partial<StepStatus>) => void
 
-const SteppedButton = ({children, api, payload, setLatestStatus, mutate, className}: {
+interface SteppedButtonProps {
     children: React.ReactNode,
     api: string,
     payload: JsonValue,
     setLatestStatus?: SetPartialStatus,
     mutate?: () => void,
     className?: string,
-}) => {
+}
+
+// A button that submits a request to an endpoint that returns a stream of status updates.
+const SteppedButton = (
+    {children, api, payload, setLatestStatus, mutate, className}: SteppedButtonProps
+) => {
     const {latestStatus, submit, isLoading} = useSteppedApi(api)
+    const [submitted, setSubmitted] = useState(false)
     const handleSubmit = async () => {
         submit(payload)
+        setSubmitted(true)
     }
     useEffect(() => {
         setLatestStatus?.(latestStatus)
     }, [latestStatus, setLatestStatus])
     useEffect(() => { // refresh when loading is done
-        if (!isLoading)
+        if (!isLoading && submitted) {
             mutate?.()
-    }, [isLoading])
+            setSubmitted(false)
+        }
+    }, [isLoading, submitted, mutate])
     return (
         <>
             <button
