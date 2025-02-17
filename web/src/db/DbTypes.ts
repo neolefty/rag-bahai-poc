@@ -17,6 +17,7 @@ export interface DocumentTable {
 
     url: string
     title: string
+    alpha_title: string | null
     raw_html: string | null
     clean_html: string | null
     raw_text: string | null
