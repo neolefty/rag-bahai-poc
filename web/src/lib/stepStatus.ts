@@ -15,8 +15,6 @@ export type StepStatuses = z.infer<typeof StepStatusesSchema>
 export type SetStep = (step: string, isError?: boolean) => void
 type StepsDone = () => void
 
-export type SetStatus = (status?: StepStatus) => void
-
 export const makeSetStep = (
     controller: ReadableStreamDefaultController<unknown>
 ): [SetStep, StepsDone, StepStatuses] => {

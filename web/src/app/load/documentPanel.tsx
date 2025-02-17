@@ -11,6 +11,10 @@ export const DocumentPanel = ({document, mutate, setDocumentUrl}: {
     setDocumentUrl?: (documentUrl: string) => void,
 }) => {
     const [latestStatus, setLatestStatus] = useState<Partial<StepStatus> | undefined>()
+    const setAndDebug = useCallback((status?: Partial<StepStatus>) => {
+        console.log(status)
+        setLatestStatus(status)
+    }, [])
     const documentUrl = document.url
     const mutateAndSetDocumentUrl = useCallback(() => {
         setDocumentUrl?.(documentUrl)
@@ -22,7 +26,7 @@ export const DocumentPanel = ({document, mutate, setDocumentUrl}: {
             <SteppedButton
                 api="/api/document/parse"
                 payload={{documentId: document.id}}
-                setLatestStatus={setLatestStatus}
+                setLatestStatus={setAndDebug}
                 mutate={mutate}
             >
                 Break into blocks
@@ -30,7 +34,7 @@ export const DocumentPanel = ({document, mutate, setDocumentUrl}: {
             <SteppedButton
                 api="/api/document/delete"
                 payload={{documentId: document.id}}
-                setLatestStatus={setLatestStatus}
+                setLatestStatus={setAndDebug}
                 className="btn-error"
                 mutate={mutateAndSetDocumentUrl}
             >
