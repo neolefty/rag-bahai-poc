@@ -3,11 +3,12 @@
 import { unified } from "unified"
 import rehypeParse from "rehype-parse"
 import rehypeSanitize from "rehype-sanitize"
-import { Root, RootContent, Element } from "hast"
+import { Element, Root, RootContent } from "hast"
 // import rehypeStringify from "rehype-stringify"
 import { SetStep } from "@/lib/stepStatus"
 import { db } from "@/db/database"
 import { Document } from "@/db/dbTypes"
+import { breakIntoBlocks } from "@/app/_load/BreakIntoBlocks"
 
 // Load a document from the database, parse its HTML, extract meta tags, break into blocks, and extract text.
 export const parseDocument = async (
@@ -71,16 +72,6 @@ const findBody = (node: Element | Root): Element | undefined => {
             if (result) return result
         }
     }
-}
-
-// A block is a document fragment that has its own #id.
-const breakIntoBlocks = async (node: Element, setStep: SetStep) => {
-    // Strategy: depth-first traversal of the tree, keeping track of parent tags
-    // For each node, if it has an `id`, it is a block
-    // But if it contains blocks, we need to separate them out, and not include their text in the parent block
-    // Problem: That could change the order of the text.
-    // Solution: Don't support blocks within blocks — only split on top-level blocks
-    // TODO: support hashtags partway through blocks, and link to the most recent hashtag
 }
 
 const extractMetaTags = (root: Root) => {

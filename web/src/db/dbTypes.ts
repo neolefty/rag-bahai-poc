@@ -30,10 +30,15 @@ export type DocumentSummary = Pick<Document, "id" | "title" | "url" | "bibliogra
 export type NewDocument = Insertable<DocumentTable>
 export type UpdateDocument = Updateable<DocumentTable>
 
-// A piece of a document that has its own URL.
+// A subtree of a document that has its own URL.
+// Note that a block may contain child blocks, in which case care must be taken to preserve the order of chunks,
+// since chunks in child blocks may intersperse the parent's chunks.
 export interface BlockTable {
     id: Generated<number>
     document_id: number
+    parent_block_id: number | null
+
+    // may be same as the document title
     title: string
     url: string
 
@@ -54,7 +59,7 @@ export type NewBlock = Insertable<BlockTable>
 export type UpdateBlock = Updateable<BlockTable>
 
 // A chunk of meaningful text within a block — for example a single sentence.
-// There may be multiple sizes of chunks, for vector indexing at different granularities.
+// There may be multiple sizes of chunks, for vector indexing at different levels of granularity.
 export interface ChunkTable {
     id: Generated<number>
     block_id: number
