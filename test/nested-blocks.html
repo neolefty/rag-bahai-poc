@@ -1,0 +1,46 @@
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nested Blocks</title>
+    <meta name="author" content="Jane Doe">
+    <meta name="description" content="Nested blocks (identified by ID) arranged in a tree">
+</head>
+
+<body>
+
+<!--
+Tree structure:
+
+    title -- "Nested Blocks Nested blocks (identified by ID) arranged in a tree"
+    1 -- "Block 1 Some content. Some more content."
+        1a -- "Block 1a Some content for Block 1a."
+        1b -- "Block 1b"
+        1c -- "Block 1c Some content for Block 1c."
+    2 -- "Block 2 Some content for Block 2."
+
+-->
+
+    <h1 id="title">Nested Blocks</h1>
+    <p>Nested blocks (identified by ID) arranged in a tree</p>
+    <div id="1">
+        Block 1
+        <p>Some content.</p>
+        <p>Some more content.</p>
+        <div id="1a">
+            <h2>Block 1a</h2>
+            <p>Some content for Block 1a.</p>
+        </div>
+        <div id="1b">Block 1b</div>
+        <div>
+            <h2 id="1c">Block 1c</h2>
+            <p>Some content for Block 1c.</p>
+        </div>
+    </div>
+    <div>
+        <h2 id="2">Block 2</h2>
+        <p>Some content for Block 2.</p>
+    </div>
+</body>
+
+</html>
