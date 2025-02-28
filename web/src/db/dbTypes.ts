@@ -46,7 +46,7 @@ export interface BlockTable {
     clean_html: string | null
     raw_text: string | null
     clean_text: string
-    order: number
+    order: number // TODO: Now that we have a tree structure, how would this work?
     // next_block_id & prev_block_id — okay if they're implied by order?
 
     // same or different from parent document

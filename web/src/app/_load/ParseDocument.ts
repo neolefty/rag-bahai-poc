@@ -3,8 +3,8 @@
 import { unified } from "unified"
 import rehypeParse from "rehype-parse"
 import rehypeSanitize from "rehype-sanitize"
+import rehypeStringify from "rehype-stringify"
 import { Element, Root, RootContent } from "hast"
-// import rehypeStringify from "rehype-stringify"
 import { SetStep } from "@/lib/stepStatus"
 import { db } from "@/db/database"
 import { Document } from "@/db/dbTypes"
@@ -26,7 +26,7 @@ export const parseDocument = async (
     }
     if (!document) throw new Error("Document not found") // shouldn't happen — already threw when loading from DB
 
-    setStep("parsing document")
+    setStep("parsing HTML")
     // split into blocks, using unified
     const tree: Root = unified()
         .use(rehypeParse, {
@@ -39,7 +39,8 @@ export const parseDocument = async (
     const body = findBody(tree)
     if (!body) throw new Error("No body found")
 
-    await breakIntoBlocks(body, setStep)
+    setStep("breaking into blocks")
+    await breakIntoBlocks({ document, node: body, setStep })
 
     debugPrint(tree)
 
